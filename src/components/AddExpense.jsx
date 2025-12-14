@@ -11,8 +11,6 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { addDoc, collection } from 'firebase/firestore';
-import { db, auth } from '@/config/firebase';
 
 const AddExpense = () => {
   const [task, setTasks] = useState('');
@@ -20,38 +18,6 @@ const AddExpense = () => {
   const [subject, setSubject] = useState('');
   const [expense, setExpense] = useState('');
 
-  const handleExpenseSubmit = async (e) => {
-    e.preventDefault();
-    const user = auth.currentUser;
-    if(!user) return alert('You must be logged in.')
-    try {
-      await addDoc(collection(db, "users", user.uid, "expenses"), {
-        subject:subject,
-        createdAt: new Date(),
-        expense: expense,
-      } )
-      setSubject('');
-      setExpense('');
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
-  const handleTaskSubmit = async (e) => {
-    e.preventDefault();
-    const user = auth.currentUser;
-    if(!user) return alert('You must be logged in.')
-    try {
-      await addDoc(collection(db, "users", user.uid, "tasks"), {
-        task:task,
-        createdAt: new Date(),
-        lastDate: lastDate,
-      })
-      setTasks('');
-      setLastDate('');
-    } catch (error) {
-      console.log(error.message)
-    }
-  }
   return (
     <div className="card bg-white/40 backdrop-blur-lg shadow-xl border border-white/20 rounded-2xl p-6 m-4 mt-2">
       <h2 className="section-title">Quick Access</h2>
@@ -65,14 +31,14 @@ const AddExpense = () => {
             </div>
           </AlertDialogTrigger>
           <AlertDialogContent>
-            <form onSubmit={handleExpenseSubmit}>
+            <form >
               <AlertDialogHeader>
                 <AlertDialogTitle>Add New Expense</AlertDialogTitle>
                   <AlertDialogDescription>
-                    <input placeholder='Coffee...' required onChange={(e) => setSubject(e.target.value)} value={subject} type='text' className='w-full border-2 border-blue-300 rounded-lg focus:border-blue-500 placeholder:text-blue-400 text-blue-900 text-xl p-2 mb-4'/>
+                    <input placeholder='Coffee...' type='text' className='w-full border-2 border-blue-300 rounded-lg focus:border-blue-500 placeholder:text-blue-400 text-blue-900 text-xl p-2 mb-4'/>
                   </AlertDialogDescription>
                   <AlertDialogDescription>
-                    <input type="number" placeholder='$59' required value={expense} onChange={(e) => setExpense(e.target.value)} className='w-full border-2 border-blue-300 rounded-lg focus:border-blue-500 placeholder:text-blue-400 text-blue-900 text-xl p-2 mb-4' min={0}/>
+                    <input type="number" placeholder='$59' required  className='w-full border-2 border-blue-300 rounded-lg focus:border-blue-500 placeholder:text-blue-400 text-blue-900 text-xl p-2 mb-4' min={0}/>
                   </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
@@ -90,14 +56,14 @@ const AddExpense = () => {
             </div>
           </AlertDialogTrigger>
           <AlertDialogContent>
-            <form onSubmit={handleTaskSubmit}>
+            <form >
               <AlertDialogHeader>
                 <AlertDialogTitle>Add New Task</AlertDialogTitle>
                   <AlertDialogDescription>
-                    <input placeholder='Pending fee..' onChange = {(e) => setTasks(e.target.value)} value={task} type='text' required className='w-full border-2 border-purple-300 rounded-lg focus:border-purple-500 placeholder:text-purple-400 text-purple-900 text-xl p-2 mb-4'/>
+                    <input placeholder='Pending fee..'  type='text' required className='w-full border-2 border-purple-300 rounded-lg focus:border-purple-500 placeholder:text-purple-400 text-purple-900 text-xl p-2 mb-4'/>
                   </AlertDialogDescription>
                   <AlertDialogDescription>
-                    <input type="date" value={lastDate} onChange={(e) => setLastDate(e.target.value)} className='w-full border-2 border-purple-300 rounded-lg focus:border-purple-500 placeholder:text-purple-400 text-purple-900 text-xl p-2 mb-4' min={0}/>
+                    <input type="date"  className='w-full border-2 border-purple-300 rounded-lg focus:border-purple-500 placeholder:text-purple-400 text-purple-900 text-xl p-2 mb-4' min={0}/>
                   </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
